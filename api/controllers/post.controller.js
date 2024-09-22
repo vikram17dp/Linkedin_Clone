@@ -68,3 +68,17 @@ export const deletePost = async(req,res)=>{
        res.status(500).json({message:"Internal Server Error"}) 
     }
 }
+
+
+export const getPostById = async(req,res)=>{
+   try {
+    const post = await Post.findById(req.params.id)
+    .populate("author","name username profilePicture headline")
+    .populate("comments.user","name profilePicture username headline")
+
+    res.status(200).json(post)
+   } catch (error) {
+        console.error(error);
+        res.status(500).json({message:"Internal sever error!"})
+   }
+}
