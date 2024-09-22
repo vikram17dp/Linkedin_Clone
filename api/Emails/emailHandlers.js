@@ -25,3 +25,19 @@ export const sendEmail = async (email, name, profileUrl)=>{
         throw error
     }
 }
+
+export const sendcommentNotificationEmail = async (recipentEmail,recipentName,commentName,postUrl,commentContent)=>{
+    const recipent = [{email}];
+    try {
+        const response = await mailtrapclient.send({
+            from:sender,
+            to:recipent,
+            subject:"New comment on your post",
+            html:createCommentNotificationEmailTemplate(recipentName,recipentEmail,commentName,postUrl,commentContent)
+        })
+        console.log("comment notification sent successfully!",response);
+        
+    } catch (error) {
+     throw error   
+    }
+}

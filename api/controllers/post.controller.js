@@ -1,4 +1,5 @@
 import cloudinary from "../lib/cloudniary.js";
+import Notification from "../models/notification.model.js";
 import Post from "../models/post.model.js";
 
 
@@ -81,4 +82,41 @@ export const getPostById = async(req,res)=>{
         console.error(error);
         res.status(500).json({message:"Internal sever error!"})
    }
+}
+
+export const CommentPost = async(req,res)=>{
+    try {
+        const postId = req.params.id;
+        const {content} = req.body;
+        const post = await Post.findByIdAndUpdate(postId,{
+            $push:{comments:{user:req.user._id,content}}
+        },{new:true})
+        .populate("author","name email username headline profilePiccture")
+
+        if(post.author.toString() !== post.user._id.toString()){
+            const newNotification = new Notification({
+                recipent:post.author,
+                type:"comment",
+                relatedUser:req.user._id,
+                realtedPost:postId
+            })
+            await newNotification.save()
+            try {
+                const  postUrl = process.env.CLIENT_URL + "/post/" + postId;
+                await sendcommentNotificationEmail(
+                    post.author.email,
+                    post.author.name,
+                    req.user.name,
+                    postUrl,
+                    comment
+                );
+            } catch (error) {
+                console.error(error)
+            }
+        }
+        res.status(200).json(post)
+    } catch (error) {
+     console.error(error);
+     res.status(500).json({message:"Internal server error!"});   
+    }
 }
