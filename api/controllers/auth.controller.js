@@ -1,6 +1,7 @@
 import User from "../models/user.model.js";
 import bcrypt from 'bcryptjs'
 import jwt from 'jsonwebtoken'
+import { sendEmail } from "../Emails/emailHandlers.js";
 
 export const signup = async (req, res, next) => {
   try {
@@ -44,10 +45,11 @@ const profileUrl = process.env.CLIENT_URL + "/profile" + user.username;
 
 
 try {
-    await emailError(user.email,user.name,profileUrl);
+
+    await sendEmail(user.email,user.name,profileUrl);
 
 } catch (error) {
-    console.error("Error Sending Welcome Email",emailError)
+    console.error("Error Sending Welcome Email",error)
 }
 
   } catch (error) {
