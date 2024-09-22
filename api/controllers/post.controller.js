@@ -39,3 +39,32 @@ export const createPosts = async (req,res)=>{
     }
 }
 
+
+export const deletePost = async(req,res)=>{
+    try {
+        const postId = req.params.id;
+        const userId = req.user._id;
+
+        const post = await Post.findById(postId);
+
+        if(!post){
+            return res.status(404).json({message:"Post not Found!"})
+        }
+
+        if(post.author.toString() !== userId.toString()){
+            return res.status(403).json({message:"You are not authorized to delete this post"})
+        }
+        if(post.image){
+            // deleting the image as well in the cloudniary also
+            await cloudinary.uploader.destroy(post.image.split("/").pop().split(".")[0])
+        }
+
+        await Post.findByIdAndUpdate(postId);
+        res.status(200).json({message:"Post deleted succesfully!"})
+
+
+    } catch (error) {
+       console.error(error);
+       res.status(500).json({message:"Internal Server Error"}) 
+    }
+}
