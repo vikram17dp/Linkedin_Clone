@@ -30,4 +30,33 @@ export const getPublicProfile = async (req,res)=>{
         console.error(error);
         res.status(500).json({message:"Internal server error!"});
     }
+};
+
+export const getprofileupdate = async (req,res)=>{
+    try {
+        const allowedFileds = [
+            "name",
+            "username",
+            "profilepicture",
+            "headline",
+            "about",
+            "location",
+            "bannerImg",
+            "skills",
+            "experience",
+            "education"
+        ];
+        const updatedData = {};
+        for(const field of allowedFileds){
+            if(req.body[field]){
+                updatedData[field] = req.body[field];
+            }
+        }
+
+        const user = await User.findByIdAndUpdate(req.user._id,{$set:updatedData},{new:true}).select("-password");
+        res.json(user);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message:"Internal server error!"});
+    }
 }

@@ -4,7 +4,7 @@ import User from '../models/user.model.js';
 
 export const protectRoute = async(req,res,next)=>{
     try {
-        const token = req.cookie["jwt-linkedin"];
+        const token = req.cookies["jwt-linkdein"];
 
         if(!token){
             return res.status(201).json({message:"Unauthorized - No Token Provided"})
@@ -12,7 +12,7 @@ export const protectRoute = async(req,res,next)=>{
 
         const decoded =  jwt.verify(token,process.env.JWT_SECRET);
 
-        if(!verify){
+        if(!decoded){
             return res.status(201).json({message:"Unauthorized - Invalid Token"})
         }
 
