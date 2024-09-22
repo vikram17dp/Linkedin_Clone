@@ -17,3 +17,17 @@ export const getSuggestedConnections = async (req, res) => {
     res.status(500).json({ message: "Internal server error!" });
   }
 };
+
+
+export const getPublicProfile = async (req,res)=>{
+    try {
+        const user = await User.findOne({username:req.params.username}).select("-password");
+        if(!user){
+            res.status(404).json({message:"Usre not found"})
+        }
+        res.json(user);
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message:"Internal server error!"});
+    }
+}
