@@ -91,3 +91,13 @@ export const logout = async (req, res) => {
   res.clearCookie("jwt-linkedin");
   res.status(200).json({message:"Logged Out Successfully!"})
 };
+
+
+export const getCurrentuser = async (req,res)=>{
+    try {
+       res.json(req.user); 
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({message:"server error!"});
+    }
+}
