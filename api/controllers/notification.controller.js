@@ -13,9 +13,32 @@ export const getUserNotifications = async(req,res)=>{
     }
 }
 export const markNotificationAsread = async(req,res)=>{
+    try {
+        const notificationId = req.params.id;
 
+        await Notification.findByIdAndUpdate({
+            _id:notificationId,
+            recipent:req.user._id
+        },{new:true})
+
+        res.json(notificationId)
+    } catch (error) {
+        console.error(error)
+        res.status(500).json({message:"Internal server error!"});
+    }
 }
 
 export const deleteNotification = async(req,res)=>{
+    try {
+        const notificationId = req.params.id;
+        await Notification.findByIdAndDelete({
+            _id:notificationId,
+            recipent:req.user._id
+        })
+        res.status(200).json({message:"Notification deleted successfully!"})
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message:"Internal server error!"});
+    }
 
 }
