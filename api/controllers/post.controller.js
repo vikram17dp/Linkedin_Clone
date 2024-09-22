@@ -120,3 +120,32 @@ export const CommentPost = async(req,res)=>{
      res.status(500).json({message:"Internal server error!"});   
     }
 }
+
+export const likePost = async(req,res)=>{
+    try {
+        const postId = req.params.id;
+        const post = await Post.findById(postId);
+        const userId = req.user._id;
+        
+        if(post.likes.includes(userId)){
+            // unlike the post
+            post.likes = post.likes.fliter((id)=>id.toString() !== userId.toString());
+        }else{
+            // like the post
+            post.likes.push(userId);
+            if(author.post.toString() !== userId.toString()){
+                const newNotification = new Notification({
+                    recipent:post.author,
+                    type:"like",
+                    relatedUser:userId,
+                    realtedPost:postId
+                })
+                await newNotification.save();
+            }
+        }
+        res.status(200).json(post);
+        
+    } catch (error) {
+        console.error(error)
+    }
+}
