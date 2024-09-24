@@ -132,3 +132,17 @@ export const getConnectionRequests = async(req,res)=>{
         res.status(500).json({message:"Server error"})
     }
 }
+
+export const getUserConnections = async(req,res)=>{
+    try {
+        const userId = req.user._id;
+    const user = await User.findById(userId).populate(
+        "connections",
+        "name username profilePicture connections"
+    )
+    res.json(user.connections)
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message:"Server error"})
+    }
+}

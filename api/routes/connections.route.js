@@ -1,6 +1,6 @@
 import express from 'express'
 import { protectRoute } from '../middleware/auth.middleware.js';
-import { acceptConnectionRequest, getConnectionRequests, rejectConnectionRequest, sendConnectionRequest } from '../controllers/connection.controller.js';
+import { acceptConnectionRequest, getConnectionRequests, getUserConnections, rejectConnectionRequest, sendConnectionRequest } from '../controllers/connection.controller.js';
 
 const router = express.Router()
 
@@ -10,6 +10,8 @@ router.put('/reject/:requestId',protectRoute,rejectConnectionRequest);
 // Get all connection requests for the current user
 router.get("/requests", protectRoute, getConnectionRequests);
 // Get all connections for a user
+router.get("/", protectRoute, getUserConnections);
+router.delete("/:userId", protectRoute, removeConnection);
 
 
 export default router;
