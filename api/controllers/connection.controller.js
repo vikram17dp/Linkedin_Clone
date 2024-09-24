@@ -117,3 +117,18 @@ export const rejectConnectionRequest = async (req, res) => {
     res.status(500).json({ message: "Server Error" });
   }
 };
+
+
+export const getConnectionRequests = async(req,res)=>{
+    try {
+        const userId = req.user._id;
+        const requests = await connectionRequestSchema.find({ recipient: userId, status: "pending" }).populate(
+			"sender",
+			"name username profilePicture headline connections"
+		);
+        res.json(requests)
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({message:"Server error"})
+    }
+}
