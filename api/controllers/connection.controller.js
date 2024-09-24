@@ -118,45 +118,75 @@ export const rejectConnectionRequest = async (req, res) => {
   }
 };
 
+export const getConnectionRequests = async (req, res) => {
+  try {
+    const userId = req.user._id;
+    const requests = await connectionRequestSchema
+      .find({ recipient: userId, status: "pending" })
+      .populate("sender", "name username profilePicture headline connections");
+    res.json(requests);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
-export const getConnectionRequests = async(req,res)=>{
-    try {
-        const userId = req.user._id;
-        const requests = await connectionRequestSchema.find({ recipient: userId, status: "pending" }).populate(
-			"sender",
-			"name username profilePicture headline connections"
-		);
-        res.json(requests)
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message:"Server error"})
-    }
-}
-
-export const getUserConnections = async(req,res)=>{
-    try {
-        const userId = req.user._id;
+export const getUserConnections = async (req, res) => {
+  try {
+    const userId = req.user._id;
     const user = await User.findById(userId).populate(
-        "connections",
-        "name username profilePicture connections"
-    )
-    res.json(user.connections)
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message:"Server error"})
-    }
-}
+      "connections",
+      "name username profilePicture connections"
+    );
+    res.json(user.connections);
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
 
-export const removeConnection = async(req,res)=>{
-    try {
-        const myId = req.user._id; 
-        const {userId } = req.params;
-        await User.findByIdAndUpdate(myId,{$pull:{connections:userId}});
-        await User.findByIdAndUpdate(userId,{$pull:{connections:myId}})
-        res.json({message:"Connection Removed Successfully!"})
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({message:"Server Error"})
+export const removeConnection = async (req, res) => {
+  try {
+    const myId = req.user._id;
+    const { userId } = req.params;
+    await User.findByIdAndUpdate(myId, { $pull: { connections: userId } });
+    await User.findByIdAndUpdate(userId, { $pull: { connections: myId } });
+    res.json({ message: "Connection Removed Successfully!" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server Error" });
+  }
+};
+export const getConnectionStatus = async (req, res) => {
+  try {
+    const targetUserId = req.params.userId;
+    const currentUserId = req.user._id;
+
+    const currentUser = req.user;
+    if (currentUser.connections.includes(targetUserId)) {
+      return res.json({ status: "connected" });
     }
 
-}
+    const pendingRequest = await ConnectionRequest.findOne({
+      $or: [
+        { sender: currentUserId, recipient: targetUserId },
+        { sender: targetUserId, recipient: currentUserId },
+      ],
+      status: "pending",
+    });
+
+    if (pendingRequest) {
+      if (pendingRequest.sender.toString() === currentUserId.toString()) {
+        return res.json({ status: "pending" });
+      } else {
+        return res.json({ status: "received", requestId: pendingRequest._id });
+      }
+    }
+
+    // if no connection or pending req found
+    res.json({ status: "not_connected" });
+  } catch (error) {
+    console.error("Error in getConnectionStatus controller:", error);
+    res.status(500).json({ message: "Server error" });
+  }
+};
