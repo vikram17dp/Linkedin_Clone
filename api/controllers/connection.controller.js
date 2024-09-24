@@ -1,4 +1,4 @@
-import connectionRequestSchema from "../models/connectionRequest.model.js";
+import Connection from "../models/connectionRequest.model.js";
 import User from "../models/user.model.js";
 import Notification from "../models/notification.model.js";
 import { sendConnectionAcceptedEmail } from "../Emails/emailHandlers.js";
@@ -15,7 +15,7 @@ export const sendConnectionRequest = async (req, res) => {
     if (req.user.connections.includes(userId)) {
       return res.status(400).json({ message: "You are already connected" });
     }
-    const existingRequest = await connectionRequestSchema.findOne({
+    const existingRequest = await Connection.findOne({
       sender: senderId,
       recipent: userId,
       status: "pending",
@@ -25,7 +25,7 @@ export const sendConnectionRequest = async (req, res) => {
         .status(400)
         .json({ message: "A connection request already exists" });
     }
-    const newRequest = new connectionRequestSchema({
+    const newRequest = new Connection({
       sender: senderId,
       recipent: userId,
     });
@@ -41,7 +41,7 @@ export const acceptConnectionRequest = async (req, res) => {
   try {
     const { requestId } = req.params;
     const userId = req.user._id;
-    const request = await connectionRequestSchema
+    const request = await Connection
       .findById(requestId)
       .populate("sender", "name email username")
       .populate("recipient", "name username");
@@ -97,7 +97,7 @@ export const rejectConnectionRequest = async (req, res) => {
     const { requestId } = req.params;
     const userId = req.user._id;
 
-    const request = await connectionRequestSchema.findById(requestId);
+    const request = await Connection.findById(requestId);
     if (request.recipient.toString() !== userId.toString()) {
       return res
         .status(403)
@@ -121,10 +121,11 @@ export const rejectConnectionRequest = async (req, res) => {
 export const getConnectionRequests = async (req, res) => {
   try {
     const userId = req.user._id;
-    const requests = await connectionRequestSchema
-      .find({ recipient: userId, status: "pending" })
+    const requests = await Connection.find({ recipient: userId, status: "pending" })
       .populate("sender", "name username profilePicture headline connections");
     res.json(requests);
+    console.log(Connection); // This should log the model definition
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
@@ -167,7 +168,7 @@ export const getConnectionStatus = async (req, res) => {
       return res.json({ status: "connected" });
     }
 
-    const pendingRequest = await ConnectionRequest.findOne({
+    const pendingRequest = await Connection.findOne({
       $or: [
         { sender: currentUserId, recipient: targetUserId },
         { sender: targetUserId, recipient: currentUserId },
