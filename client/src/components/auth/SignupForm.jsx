@@ -1,13 +1,37 @@
 import React, { useState } from "react";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { toast } from "react-hot-toast";
+import { Loader } from "lucide-react";
+import { axiosInstance } from "../../lib/axois.js";
+
 
 export default function SignupForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const queryClient = useQueryClient();
+
+  const {mutate:signUpMutation,isLoading} = useMutation({
+    mutationFn:async (data)=>{
+      const res = await axiosInstance.post("/auth/signup",data);
+      return res.data;
+    },
+    onSuccess:()=>{
+      toast.success("Account created successfully");
+			queryClient.invalidateQueries({ queryKey: ["authUser"] });
+    },
+    onError:(err)=>{
+      toast.error(err.response?.data?.message || "Something went wrong");
+		
+    }
+  })
+
+
+
   const handleSignup = (e) => {
     e.preventDefault();
-    console.log(name, email, username, password);
+    signUpMutation({ name, username, email, password });
   };
   return (
     <form onSubmit={handleSignup}>
@@ -47,7 +71,8 @@ export default function SignupForm() {
           className="input input-bordered w-full bg-gray-200 text-black"
           required
         />
-        <button className="btn btn-primary w-full text-white" onSubmit={handleSignup}>Agree & Join</button>
+        <button disabled={isLoading} type="submit" className="btn btn-primary w-full text-white" onSubmit={handleSignup}>
+         {isLoading ? <Loader className="size-5 animate-spin"/> : " Agree & Join"}</button>
       </div>
     </form>
   );
