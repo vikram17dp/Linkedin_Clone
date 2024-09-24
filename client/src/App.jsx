@@ -11,22 +11,26 @@ import {Navigate} from 'react-router-dom'
 
 
 export default function App() {
-  const {data:authUser,isLoading} = useQuery({
-    queryKey:['authUser'],
-    queryFn: async()=>{
-      try {
-        const res = await axiosInstance.get('auth/me');
-        return res.data;
-      } catch (err) {
-        if(err.response && err.response.status === 401){
-          return null;
-        }
-        toast.error(err.response.data.message || "Something went wrong");
-      }
+  const { data: authUser, isLoading } = useQuery({
+  queryKey: ["authUser"],
+  queryFn: async () => {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      return null; // No token, user is not authenticated
     }
-  }) 
-  if(isLoading) return null;
-  
+    try {
+      const res = await axiosInstance.get("/auth/me");
+      return res.data;
+    } catch (err) {
+      if (err.response && err.response.status === 401) {
+        return null; // User is not authenticated
+      }
+      toast.error(err.response.data.message || "Something went wrong");
+    }
+  },
+});
+
+
   return (
     <Layout>
       <Routes>

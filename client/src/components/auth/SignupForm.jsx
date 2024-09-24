@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { Loader } from "lucide-react";
 import { axiosInstance } from "../../lib/axois.js";
+import { useNavigate } from "react-router-dom";
 
 
 export default function SignupForm() {
@@ -11,6 +12,7 @@ export default function SignupForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
   const {mutate:signUpMutation,isLoading} = useMutation({
     mutationFn:async (data)=>{
@@ -32,6 +34,7 @@ export default function SignupForm() {
   const handleSignup = (e) => {
     e.preventDefault();
     signUpMutation({ name, username, email, password });
+    // navigate("/login"); 
   };
   return (
     <form onSubmit={handleSignup}>
@@ -71,7 +74,7 @@ export default function SignupForm() {
           className="input input-bordered w-full bg-gray-200 text-black"
           required
         />
-        <button disabled={isLoading} type="submit" className="btn btn-primary w-full text-white" onSubmit={handleSignup}>
+        <button disabled={isLoading} type="submit" className="btn btn-primary w-full text-white" >
          {isLoading ? <Loader className="size-5 animate-spin"/> : " Agree & Join"}</button>
       </div>
     </form>
