@@ -68,7 +68,7 @@ export const login = async (req, res)  => {
         return res.status(400).json({message:"Invalid credentials"})
     }
     const token = jwt.sign({userId:user._id},process.env.JWT_SECRET,{expiresIn:"3d"});
-    await res.cookies("jwt-linkdein",token,{
+    await res.cookie("jwt-linkdein",token,{
         httpOnly:true,
         maxAge: 3 * 24 * 60 * 60 * 1000,
 			sameSite: "strict",
