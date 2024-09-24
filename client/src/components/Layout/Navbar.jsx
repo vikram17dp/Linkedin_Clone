@@ -1,12 +1,13 @@
 import { Bell, Home, LogOut, User, Users } from 'lucide-react'
 import React from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { axiosInstance } from '../../lib/axois';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
 export default function Navbar() {
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
 	const queryClient = useQueryClient();
+  const navigate = useNavigate();
 
 	const { data: notifications } = useQuery({
 		queryKey: ["notifications"],
@@ -25,7 +26,11 @@ export default function Navbar() {
 		onSuccess: () => {
 			queryClient.invalidateQueries({ queryKey: ["authUser"] });
       queryClient.setQueryData(["authUser"], null);
+      setTimeout(() => {
+        navigate('/signup');
+      }, 0);
 		},
+  
 	});
 
   const unreadNotificationCount = Array.isArray(notifications?.data)
@@ -77,7 +82,8 @@ export default function Navbar() {
                       <User size={20}/>
                       <span className='text-xs hidden md:block'>Me</span>
                   </Link>
-                  <button className='flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-800' onClick={()=>logout()}>
+                  <button
+                  className='flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-800' onClick={()=>logout()}>
                       <LogOut size={20}/>
                       <span className='hidden md:inline'>LogOut</span>
                   </button>

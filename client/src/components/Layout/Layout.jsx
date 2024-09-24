@@ -3,8 +3,7 @@ import Navbar from '../Layout/Navbar'
 import { useQuery } from '@tanstack/react-query';
 
 export default function Layout({children}) {
-  const { data: authUser, isLoading, isError } = useQuery({ queryKey: ["authUser"] });
-  console.log("authuser in layout",{ authUser, isLoading, isError });
+
 
   return (
     <div className='min-h-screen bg-white '>

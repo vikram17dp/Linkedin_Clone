@@ -34,7 +34,7 @@ export default function SignupForm() {
   const handleSignup = (e) => {
     e.preventDefault();
     signUpMutation({ name, username, email, password });
-    // navigate("/login"); 
+    navigate("/login"); 
   };
   return (
     <form onSubmit={handleSignup}>
