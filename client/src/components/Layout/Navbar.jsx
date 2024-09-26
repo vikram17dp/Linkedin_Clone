@@ -24,11 +24,11 @@ export default function Navbar() {
 	const { mutate: logout } = useMutation({
 		mutationFn: () => axiosInstance.post("/auth/logout"),
 		onSuccess: () => {
+      localStorage.removeItem('token');
 			queryClient.invalidateQueries({ queryKey: ["authUser"] });
       queryClient.setQueryData(["authUser"], null);
-      setTimeout(() => {
-        navigate('/signup');
-      }, 0);
+      navigate('/login');
+      
 		},
   
 	});
@@ -86,6 +86,7 @@ export default function Navbar() {
                   className='flex items-center space-x-1 text-sm text-gray-600 hover:text-gray-800' onClick={()=>logout()}>
                       <LogOut size={20}/>
                       <span className='hidden md:inline'>LogOut</span>
+                      
                   </button>
                     
                 </>

@@ -10,25 +10,33 @@ import { Toaster,toast } from 'react-hot-toast'
 import {Navigate} from 'react-router-dom'
 
 
+
 export default function App() {
   const { data: authUser, isLoading } = useQuery({
   queryKey: ["authUser"],
   queryFn: async () => {
     const token = localStorage.getItem('token');
     if (!token) {
-      return null; // No token, user is not authenticated
+      return null; 
     }
     try {
       const res = await axiosInstance.get("/auth/me");
       return res.data;
     } catch (err) {
       if (err.response && err.response.status === 401) {
-        return null; // User is not authenticated
+        return null; 
       }
       toast.error(err.response.data.message || "Something went wrong");
     }
   },
 });
+if (isLoading) {
+  return (
+    <div className="flex justify-center items-center h-screen">
+      <span>Loading...</span> 
+    </div>
+  );
+}
 
 
   return (
