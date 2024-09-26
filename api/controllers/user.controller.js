@@ -55,11 +55,11 @@ export const getprofileupdate = async (req, res) => {
       }
     }
 
-    if(req.body.profilepicture){
+    if (req.body.profilepicture) {
       const result = await cloudinary.uploader.upload(req.body.profilepicture);
       updatedData.profilepicture = result.secure_url;
     }
-    if(req.body.bannerImg){
+    if (req.body.bannerImg) {
       const result = await cloudinary.uploader.upload(req.body.bannerImg);
       updatedData.bannerImg = result.secure_url;
     }
@@ -69,9 +69,9 @@ export const getprofileupdate = async (req, res) => {
       { $set: updatedData },
       { new: true }
     ).select("-password");
-    res.json(user);
+    return res.json(user);
   } catch (error) {
     console.error(error);
-    res.status(500).json({ message: "Internal server error!" });
+    return res.status(500).json({ message: "Internal server error!" });
   }
 };
