@@ -8,6 +8,7 @@ import { axiosInstance } from "./lib/axois.js";
 import { useQuery } from "@tanstack/react-query";
 import { Toaster,toast } from 'react-hot-toast'
 import {Navigate} from 'react-router-dom'
+import HomePage from './pages/HomePage.jsx'
 
 
 
@@ -42,7 +43,7 @@ if (isLoading) {
   return (
     <Layout>
       <Routes>
-        <Route path='/' element={authUser ?<Home/> : <Navigate to={'/login'}/>}/>
+        <Route path='/' element={authUser ?<HomePage/> : <Navigate to={'/login'}/>}/>
         <Route path='/signup' element={!authUser ?<SignupPage/> : <Navigate to={'/'}/>}/>
         <Route path='/login' element={!authUser ? <LoginPage/> : <Navigate to={"/"}/>}/>
       </Routes>
