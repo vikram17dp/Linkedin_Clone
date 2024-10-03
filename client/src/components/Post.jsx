@@ -61,9 +61,12 @@ const Post = ({ post }) => {
       const response = await axiosInstance.post(`/posts/${post._id}/like`);
       return response.data;
     },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-      queryClient.invalidateQueries({ queryKey: ["post", postId] });
+    onSuccess: (data) => {
+      queryClient.setQueryData(["post", postId], (oldData) => ({
+        ...oldData,
+        likes: data.likes, 
+      }));
+      queryClient.invalidateQueries({ queryKey: ["posts"] }); 
     },
   });
 
@@ -93,18 +96,7 @@ const Post = ({ post }) => {
         },
         createdAt: new Date(),
     };
-      setComments([
-        ...comments,
-        {
-          content: newComment,
-          user: {
-            _id: authUser._id,
-            name: authUser.name,
-            profilePicture: authUser.profilePicture,
-          },
-          createdAt: new Date(),
-        },
-      ]);
+    setComments((prevComments) => [...prevComments, newCommentData]);
     }
   };
 

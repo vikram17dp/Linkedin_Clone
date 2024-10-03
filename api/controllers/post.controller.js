@@ -127,7 +127,6 @@ export const likePost = async (req, res) => {
     try {
         const postId = req.params.id;
         const post = await Post.findById(postId);
-        // console.log(`Post found: ${post}`);
         const userId = req.user._id;
 
         // Check if post was found
