@@ -1,3 +1,4 @@
+import { sendcommentNotificationEmail } from "../Emails/emailHandlers.js";
 import cloudinary from "../lib/cloudniary.js";
 import Notification from "../models/notification.model.js";
 import Post from "../models/post.model.js";
@@ -89,12 +90,13 @@ export const CommentPost = async(req,res)=>{
     try {
         const postId = req.params.id;
         const {content} = req.body;
+        console.log("User in CommentPost: ", req.user); 
         const post = await Post.findByIdAndUpdate(postId,{
             $push:{comments:{user:req.user._id,content}}
         },{new:true})
         .populate("author","name email username headline profilePiccture")
 
-        if(post.author.toString() !== post.user._id.toString()){
+       if (post.author.toString() !== req.user._id.toString()){
             const newNotification = new Notification({
                 recipent:post.author,
                 type:"comment",
@@ -109,7 +111,7 @@ export const CommentPost = async(req,res)=>{
                     post.author.name,
                     req.user.name,
                     postUrl,
-                    comment
+                    content
                 );
             } catch (error) {
                 console.error(error)

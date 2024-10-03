@@ -6,6 +6,9 @@ export const getUserNotifications = async(req,res)=>{
         .sort({createdAt:-1})
         .populate("relatedUser","name username profilePicture")
         .populate("relatedPost","content image")
+        if (!notifications) {
+            return res.status(404).json({ message: "No notifications found." });
+        }
         res.status(200).json(notifications)
     } catch (error) {
         console.error(error)

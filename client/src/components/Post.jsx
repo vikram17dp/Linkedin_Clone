@@ -13,7 +13,7 @@ import {
 import { formatDistanceToNow } from "date-fns";
 
 import PostAction from "./PostAction";
-import { axiosInstance } from "../lib/axois";
+import { axiosInstance } from "../lib/axois.js";
 
 const Post = ({ post }) => {
   const { postId } = useParams();
@@ -43,22 +43,21 @@ const Post = ({ post }) => {
   });
 
   const { mutate: createComment, isPending: isAddingComment } = useMutation({
-    mutationFn: async (newComment) => {
-      await axiosInstance.post(`/posts/${post._id}/comment`, {
-        content: newComment,
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["posts"] });
-      toast.success("Comment added successfully");
-    },
-    onError: (err) => {
-      toast.error(err.response.data.message || "Failed to add comment");
-    },
-  });
+		mutationFn: async (newComment) => {
+			await axiosInstance.post(`/posts/${post._id}/comment`, { content: newComment });
+		},
+		onSuccess: () => {
+			queryClient.invalidateQueries({ queryKey: ["posts"] });
+			toast.success("Comment added successfully");
+		},
+		onError: (err) => {
+			toast.error(err.response.data.message || "Failed to add comment");
+		},
+	});
+
 
   const { mutate: likePost, isPending: isLikingPost } = useMutation({
-    mutationFn: async () => {
+    mutationFn: async (newComment) => {
       await axiosInstance.post(`/posts/${post._id}/like`);
     },
     onSuccess: () => {
@@ -76,28 +75,29 @@ const Post = ({ post }) => {
     if (isLikingPost) return;
     likePost();
   };
-  console.log("isLiked:", isLiked);
-  console.log("authUser:", authUser);
-
+  
   const handleAddComment = async (e) => {
     e.preventDefault();
     if (newComment.trim()) {
+      const newCommentData = {
+        content: newComment,
+        user: {
+          _id: authUser._id,
+          name: authUser.name,
+          profilePicture: authUser.profilePicture,
+        },
+        createdAt: new Date(),
+      };
+  
+      // Optimistically update the comments state
+      setComments((prevComments) => [...prevComments, newCommentData]);
+  
+      // Call the API to add the comment
       createComment(newComment);
       setNewComment("");
-      setComments([
-        ...comments,
-        {
-          content: newComment,
-          user: {
-            _id: authUser._id,
-            name: authUser.name,
-            profilePicture: authUser.profilePicture,
-          },
-          createdAt: new Date(),
-        },
-      ]);
     }
   };
+  
 
   return (
     <div className="bg-secondary rounded-lg shadow mb-4">
@@ -171,9 +171,9 @@ const Post = ({ post }) => {
       {showComments && (
         <div className="px-4 pb-4">
           <div className="mb-4 max-h-60 overflow-y-auto">
-            {comments.map((comment) => (
+            {comments.map((comment,index) => (
               <div
-                key={comment._id}
+                key={comment._id || index}
                 className="mb-2 bg-base-100 p-2 rounded flex items-start"
               >
                 <img
