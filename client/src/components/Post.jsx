@@ -58,7 +58,8 @@ const Post = ({ post }) => {
 
   const { mutate: likePost, isPending: isLikingPost } = useMutation({
     mutationFn: async (newComment) => {
-      await axiosInstance.post(`/posts/${post._id}/like`);
+      const response = await axiosInstance.post(`/posts/${post._id}/like`);
+      return response.data;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["posts"] });
@@ -76,28 +77,36 @@ const Post = ({ post }) => {
     likePost();
   };
   
+
   const handleAddComment = async (e) => {
     e.preventDefault();
     if (newComment.trim()) {
+    
+      createComment(newComment);
+      setNewComment("");
       const newCommentData = {
         content: newComment,
         user: {
-          _id: authUser._id,
-          name: authUser.name,
-          profilePicture: authUser.profilePicture,
+            _id: authUser._id,
+            name: authUser.name,
+            profilePicture: authUser.profilePicture,
         },
         createdAt: new Date(),
-      };
-  
-      // Optimistically update the comments state
-      setComments((prevComments) => [...prevComments, newCommentData]);
-  
-      // Call the API to add the comment
-      createComment(newComment);
-      setNewComment("");
+    };
+      setComments([
+        ...comments,
+        {
+          content: newComment,
+          user: {
+            _id: authUser._id,
+            name: authUser.name,
+            profilePicture: authUser.profilePicture,
+          },
+          createdAt: new Date(),
+        },
+      ]);
     }
   };
-  
 
   return (
     <div className="bg-secondary rounded-lg shadow mb-4">

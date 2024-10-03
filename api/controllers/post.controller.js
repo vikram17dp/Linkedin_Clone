@@ -123,32 +123,42 @@ export const CommentPost = async(req,res)=>{
      res.status(500).json({message:"Internal server error!"});   
     }
 }
-
-export const likePost = async(req,res)=>{
+export const likePost = async (req, res) => {
     try {
         const postId = req.params.id;
         const post = await Post.findById(postId);
+        // console.log(`Post found: ${post}`);
         const userId = req.user._id;
-        
-        if(post.likes.includes(userId)){
-            // unlike the post
-            post.likes = post.likes.fliter((id)=>id.toString() !== userId.toString());
-        }else{
-            // like the post
+
+        // Check if post was found
+        if (!post) {
+            console.error(`Post with ID ${postId} not found.`);
+            return res.status(404).json({ message: "Post not found" });
+        }
+
+        if (post.likes.includes(userId)) {
+            // Unlike the post
+            post.likes = post.likes.filter((id) => id.toString() !== userId.toString());
+        } else {
+            // Like the post
             post.likes.push(userId);
-            if(author.post.toString() !== userId.toString()){
+            if (post.author.toString() !== userId.toString()) {
                 const newNotification = new Notification({
-                    recipent:post.author,
-                    type:"like",
-                    relatedUser:userId,
-                    realtedPost:postId
-                })
+                    recipient: post.author, // Corrected spelling from 'recipent' to 'recipient'
+                    type: "like",
+                    relatedUser: userId,
+                    relatedPost: postId,
+                });
                 await newNotification.save();
             }
         }
+
+        await post.save(); 
+
         res.status(200).json(post);
         
     } catch (error) {
-        console.error(error)
+        console.error(error);
+        res.status(500).json({ message: "An error occurred while liking the post." });
     }
-}
+};
