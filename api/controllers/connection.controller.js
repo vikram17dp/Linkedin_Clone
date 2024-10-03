@@ -124,7 +124,7 @@ export const getConnectionRequests = async (req, res) => {
     const requests = await Connection.find({ recipient: userId, status: "pending" })
       .populate("sender", "name username profilePicture headline connections");
     res.json(requests);
-    console.log(Connection); // This should log the model definition
+    
 
   } catch (error) {
     console.error(error);
