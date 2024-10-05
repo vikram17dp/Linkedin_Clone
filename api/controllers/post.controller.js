@@ -96,7 +96,7 @@ export const CommentPost = async(req,res)=>{
         },{new:true})
         .populate("author","name email username headline profilePiccture")
 
-       if (post.author.toString() !== req.user._id.toString()){
+       if (post.author._id.toString() !== req.user._id.toString()){
             const newNotification = new Notification({
                 recipent:post.author,
                 type:"comment",
@@ -143,7 +143,7 @@ export const likePost = async (req, res) => {
             post.likes.push(userId);
             if (post.author.toString() !== userId.toString()) {
                 const newNotification = new Notification({
-                    recipient: post.author, // Corrected spelling from 'recipent' to 'recipient'
+                    recipient: post.author, 
                     type: "like",
                     relatedUser: userId,
                     relatedPost: postId,
