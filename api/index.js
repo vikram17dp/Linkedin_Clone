@@ -34,10 +34,7 @@ app.listen(PORT, () => {
 });
 
 mongoose
-  .connect(process.env.MONGO,{
-    serverSelectionTimeoutMS: 5000, 
-    socketTimeoutMS: 45000,
-  })
+  .connect(process.env.MONGO)
   .then(() => {
     console.log("mongoose  is connected!");
   })
