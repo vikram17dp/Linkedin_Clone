@@ -4,38 +4,30 @@ import Notification from "../models/notification.model.js";
 import { sendConnectionAcceptedEmail } from "../Emails/emailHandlers.js";
 
 export const sendConnectionRequest = async (req, res) => {
+  const { userId } = req.params; 
+  const senderId = req.user.id; 
+  // console.log(`Received connection request from user: ${req.user.id} to user: ${userId}`);
+
+
+
+  if (!userId) {
+      return res.status(400).json({ error: "User ID is required" });
+  }
+
   try {
-    const { userId } = req.params;
-    const senderId = req.user._id;
-    if (senderId.toString() === userId) {
-      return res
-        .status(400)
-        .json({ message: "You can't send a request to youerself" });
-    }
-    if (req.user.connections.includes(userId)) {
-      return res.status(400).json({ message: "You are already connected" });
-    }
-    const existingRequest = await Connection.findOne({
-      sender: senderId,
-      recipent: userId,
-      status: "pending",
-    });
-    if (existingRequest) {
-      return res
-        .status(400)
-        .json({ message: "A connection request already exists" });
-    }
-    const newRequest = new Connection({
-      sender: senderId,
-      recipent: userId,
-    });
-    await newRequest.save();
-    res.status(201).json({ message: "Connection request sent successfully" });
+      const connectionRequest = new Connection({
+          sender: senderId,
+          recipient: userId, 
+      });
+
+      await connectionRequest.save(); 
+      return res.status(201).json({ message: "Connection request sent successfully!" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server error" });
+      console.error(error);
+      return res.status(500).json({ error: "Internal server error" });
   }
 };
+
 
 export const acceptConnectionRequest = async (req, res) => {
   try {
@@ -74,7 +66,7 @@ export const acceptConnectionRequest = async (req, res) => {
     await notification.save();
     const senderEmail = request.sender.email;
     const senderName = request.sender.name;
-    const recipientName = request.recipent.name;
+    const recipientName = request.recipient.name;
     const profileUrl =
       process.env.CLIENT_URL + "/profile/" + request.recipient.username;
     try {

@@ -12,7 +12,7 @@ export const getSuggestedConnections = async (req, res) => {
     })
       .select("name username profilepicture headline")
       .limit(3);
-    res.json(currentUser);
+    res.json(suggestedUser);
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error!" });
@@ -21,18 +21,17 @@ export const getSuggestedConnections = async (req, res) => {
 
 export const getPublicProfile = async (req, res) => {
   try {
-    const user = await User.findOne({ username: req.params.username }).select(
-      "-password"
-    );
-    if (!user) {
-      res.status(404).json({ message: "Usre not found" });
-    }
-    res.json(user);
+      const userProfile = await User.findById(req.params.id);
+      if (!userProfile) {
+          return res.status(404).json({ message: "User not found" });
+      }
+      return res.json(userProfile); 
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Internal server error!" });
+      console.error(error);
+      return res.status(500).json({ message: "Internal server error!" }); 
   }
 };
+
 
 export const getprofileupdate = async (req, res) => {
   try {

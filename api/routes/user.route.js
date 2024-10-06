@@ -4,8 +4,8 @@ import { getprofileupdate, getPublicProfile, getSuggestedConnections } from '../
 
 const router = express.Router();
 
-router.get('/suggesutions',protectRoute,getSuggestedConnections)
+router.get('/suggestions',protectRoute,getSuggestedConnections)
 router.get('/:username',protectRoute,getPublicProfile)
 router.put('/profile',protectRoute,getprofileupdate)
 
-export default router;
+export default router;  
