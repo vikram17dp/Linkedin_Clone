@@ -142,6 +142,7 @@ export const likePost = async (req, res) => {
             // Like the post
             post.likes.push(userId);
             if (post.author.toString() !== userId.toString()) {
+                // console.log('Recipient:', post.author);
                 const newNotification = new Notification({
                     recipient: post.author, 
                     type: "like",
