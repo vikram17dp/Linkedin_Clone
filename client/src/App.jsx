@@ -10,6 +10,8 @@ import { Toaster,toast } from 'react-hot-toast'
 import {Navigate} from 'react-router-dom'
 import HomePage from './pages/HomePage.jsx'
 import NotificationsPage from './pages/NotificationsPage.jsx'
+import { Network } from 'lucide-react'
+import Networkpage from './pages/Networkpage.jsx'
 
 
 
@@ -48,6 +50,7 @@ if (isLoading) {
         <Route path='/signup' element={!authUser ?<SignupPage/> : <Navigate to={'/'}/>}/>
         <Route path='/login' element={!authUser ? <LoginPage/> : <Navigate to={"/"}/>}/>
         <Route path='/notifications' element={authUser ? <NotificationsPage /> : <Navigate to={"/login"} />} />
+        <Route path='/network' element={authUser ? <Networkpage/> : <Navigate to={'/login'}/>}/>
       </Routes>
       <Toaster/>
     </Layout>

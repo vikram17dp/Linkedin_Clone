@@ -45,9 +45,8 @@ export const sendcommentNotificationEmail = async (recipentEmail,recipentName,co
 
 export const sendConnectionAcceptedEmail = async(senderEmail, senderName, recipientName, profileUrl)=>{
     const recipient = [{email:senderEmail}];
-
     try {
-        const  response = await MailtrapClient.send({
+        const  response = await mailtrapclient.send({
             from :sender,
             to:recipient,
             subject:`${recipientName} accepted your connection request`,

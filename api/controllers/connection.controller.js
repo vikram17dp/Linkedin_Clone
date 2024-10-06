@@ -30,6 +30,8 @@ export const sendConnectionRequest = async (req, res) => {
 
 
 export const acceptConnectionRequest = async (req, res) => {
+  // console.log("Request User ID:", req.user._id); // Log user ID
+  // console.log("Request ID:", req.params.requestId); // Log request ID
   try {
     const { requestId } = req.params;
     const userId = req.user._id;
@@ -50,7 +52,7 @@ export const acceptConnectionRequest = async (req, res) => {
         .status(400)
         .json({ message: "This request has already been processed" });
     }
-    request.status = "pending";
+    request.status = "accepted";
     await request.save();
     await User.findByIdAndUpdate(request.sender._id, {
       $addToSet: { connections: userId },
@@ -114,7 +116,7 @@ export const getConnectionRequests = async (req, res) => {
   try {
     const userId = req.user._id;
     const requests = await Connection.find({ recipient: userId, status: "pending" })
-      .populate("sender", "name username profilePicture headline connections");
+      .populate("sender", "name username profilepicture headline connections");
     res.json(requests);
     
 
