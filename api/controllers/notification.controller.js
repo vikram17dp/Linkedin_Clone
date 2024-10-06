@@ -15,21 +15,28 @@ export const getUserNotifications = async(req,res)=>{
         res.status(500).json({message:"Internal server error!"})
     }
 }
-export const markNotificationAsread = async(req,res)=>{
+export const markNotificationAsread = async(req, res) => {
     try {
         const notificationId = req.params.id;
+        
+        
+        const updatedNotification = await Notification.findOneAndUpdate(
+            { _id: notificationId, recipent: req.user._id },
+            { read: true },
+            { new: true }
+        );
+        
+        if (!updatedNotification) {
+            return res.status(404).json({ message: "Notification not found." });
+        }
 
-        await Notification.findByIdAndUpdate({
-            _id:notificationId,
-            recipent:req.user._id
-        },{new:true})
-
-        res.json(notificationId)
+        res.json(updatedNotification); 
     } catch (error) {
-        console.error(error)
-        res.status(500).json({message:"Internal server error!"});
+        console.error(error);
+        res.status(500).json({ message: "Internal server error!" });
     }
 }
+
 
 export const deleteNotification = async(req,res)=>{
     try {
