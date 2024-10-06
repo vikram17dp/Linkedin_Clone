@@ -13,7 +13,7 @@ export default function HomePage() {
     queryKey: ["recommendedUsers"],
     queryFn: async () => {
       const res = await axiosInstance.get("/users/suggestions");
-      console.log("API response for recommended users:", res.data);
+      // console.log("API response for recommended users:", res.data);
       return res.data;
     },
   });
@@ -25,7 +25,7 @@ export default function HomePage() {
     },
   });
 
-  console.log("recommendedUsers", recommendedUsers);
+  // console.log("recommendedUsers", recommendedUsers);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">

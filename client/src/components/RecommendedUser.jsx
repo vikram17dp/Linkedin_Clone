@@ -15,14 +15,14 @@ const RecommendedUser = ({ user }) => {
     },
   });
 
-  console.log("connectionStatus", connectionStatus);
+  // console.log("connectionStatus", connectionStatus);
 
   const { mutate: sendConnectionRequest } = useMutation({
     mutationFn: (userId) => axiosInstance.post(`/connection/request/${userId}`),
     onSuccess: (data) => {
       toast.success("Connection request sent successfully");
       queryClient.invalidateQueries({ queryKey: ["connectionStatus", user._id] });
-      console.log('Response from sending connection request:', data);
+      // console.log('Response from sending connection request:', data);
     },
     onError: (error) => {
       toast.error(error.response?.data?.error || "An error occurred");
@@ -66,7 +66,7 @@ const RecommendedUser = ({ user }) => {
       );
     }
 
-    console.log("Current connection status:", connectionStatus?.status);
+    // console.log("Current connection status:", connectionStatus?.status);
 
     switch (connectionStatus?.status) {
       case "pending":
@@ -113,7 +113,7 @@ const RecommendedUser = ({ user }) => {
     }
   };
 
-  console.log("Final connection status:", connectionStatus?.status);
+  // console.log("Final connection status:", connectionStatus?.status);
 
   return (
     <div className="flex items-center justify-between mb-4">
