@@ -62,7 +62,7 @@ export const deletePost = async(req,res)=>{
             await cloudinary.uploader.destroy(post.image.split("/").pop().split(".")[0])
         }
 
-        await Post.findByIdAndUpdate(postId);
+        await Post.findByIdAndDelete(postId);
         res.status(200).json({message:"Post deleted succesfully!"})
 
 
