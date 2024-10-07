@@ -21,14 +21,21 @@ export const getSuggestedConnections = async (req, res) => {
 
 export const getPublicProfile = async (req, res) => {
   try {
-      const userProfile = await User.findById(req.params.id);
-      if (!userProfile) {
-          return res.status(404).json({ message: "User not found" });
-      }
-      return res.json(userProfile); 
+    const { username } = req.params;
+    // console.log("Fetching user profile for:", username);
+    
+    const userProfile = await User.findOne({ username });
+    
+    if (!userProfile) {
+      console.log(`User not found for username: ${username}`);
+      return res.status(404).json({ message: "User not found" });
+    }
+    
+    // console.log(`User profile found:`, userProfile);
+    return res.json(userProfile);
   } catch (error) {
-      console.error(error);
-      return res.status(500).json({ message: "Internal server error!" }); 
+    console.error("Error in getPublicProfile:", error);
+    return res.status(500).json({ message: "Internal server error!" });
   }
 };
 
@@ -56,6 +63,7 @@ export const getprofileupdate = async (req, res) => {
 
     if (req.body.profilepicture) {
       const result = await cloudinary.uploader.upload(req.body.profilepicture);
+      console.log("Profile picture uploaded:", result.secure_url);
       updatedData.profilepicture = result.secure_url;
     }
     if (req.body.bannerImg) {

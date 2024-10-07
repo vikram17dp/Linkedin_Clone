@@ -13,6 +13,7 @@ import NotificationsPage from './pages/NotificationsPage.jsx'
 import { Network } from 'lucide-react'
 import Networkpage from './pages/Networkpage.jsx'
 import PostPage from './pages/PostPage.jsx'
+import ProfilePage from './pages/ProfilePage.jsx'
 
 
 
@@ -42,8 +43,6 @@ if (isLoading) {
     </div>
   );
 }
-
-
   return (
     <Layout>
       <Routes>
@@ -52,7 +51,8 @@ if (isLoading) {
         <Route path='/login' element={!authUser ? <LoginPage/> : <Navigate to={"/"}/>}/>
         <Route path='/notifications' element={authUser ? <NotificationsPage /> : <Navigate to={"/login"} />} />
         <Route path='/network' element={authUser ? <Networkpage/> : <Navigate to={'/login'}/>}/>
-      <Route path='/post/:postId' element={authUser ? <PostPage/> : <Navigate to={'/login'}/>}/>
+        <Route path='/post/:postId' element={authUser ? <PostPage/> : <Navigate to={'/login'}/>}/>
+        <Route path='/profile/:username' element={authUser ? <ProfilePage /> : <Navigate to={"/login"} />} />
       </Routes>
       <Toaster/>
     </Layout>
