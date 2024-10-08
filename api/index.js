@@ -9,16 +9,9 @@ import notificationRoutes from './routes/notification.routes.js'
 import connectionRoute from './routes/connections.route.js'
 import cors from 'cors'
 import cookieParser from "cookie-parser";
-<<<<<<< HEAD
 import path from 'path';
 
 dotenv.config();
-=======
-import path from 'path'
-
-dotnev.config();
->>>>>>> origin/main
-
 const app = express();
 const PORT = process.env.PORT || 5000;
 
