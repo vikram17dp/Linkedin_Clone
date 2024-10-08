@@ -51,6 +51,7 @@ export const getprofileupdate = async (req, res) => {
       "skills",
       "experience",
       "education",
+      "hobbies"
     ];
     const updatedData = {};
     for (const field of allowedFileds) {

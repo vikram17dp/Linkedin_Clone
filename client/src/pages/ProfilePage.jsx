@@ -6,6 +6,7 @@ import AboutSection from "./AboutSection";
 import ExperienceSection from "./ExperienceSection";
 import EducationSection from "./EducationSection";
 import SkilledSection from "./SkilledSection";
+import HobbiesPage from "./HobbiesPage";
 
 const ProfilePage = () => {
   const { username } = useParams();
@@ -70,6 +71,12 @@ const ProfilePage = () => {
         isOwnProfile={isOwnProfile}
         onSave={handleSave}
       />
+      <HobbiesPage
+       userData={userData}
+       isOwnProfile={isOwnProfile}
+       onSave={handleSave}
+      />
+
     </div>
   );
 };

@@ -59,6 +59,7 @@ const userSchema = new mongoose.Schema({
             grade:String
         }
     ],
+    hobbies:[String],
     connections:[ {
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
