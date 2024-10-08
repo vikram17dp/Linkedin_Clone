@@ -9,7 +9,7 @@ import notificationRoutes from './routes/notification.routes.js'
 import connectionRoute from './routes/connections.route.js'
 import cors from 'cors'
 import cookieParser from "cookie-parser";
-
+import path from 'path'
 
 dotnev.config();
 
@@ -22,6 +22,12 @@ app.use(cors({
   origin:"http://localhost:5173",
   credentials:true
 }))
+const __dirname = path.resolve();
+app.use(express.static(path.join(__dirname, '/client/dist')));
+
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, 'client', 'dist', 'index.html'));
+});
 
 app.use('/api/v1/auth',authRoutes)
 app.use('/api/v1/users',userRoutes)
