@@ -5,7 +5,7 @@ import ProfileHeader from "./ProfileHeader";
 import AboutSection from "./AboutSection";
 import ExperienceSection from "./ExperienceSection";
 import EducationSection from "./EducationSection";
-import SkilldSection from "./SkilldSection";
+import SkilledSection from "./SkilledSection";
 
 const ProfilePage = () => {
   const { username } = useParams();
@@ -23,7 +23,8 @@ const ProfilePage = () => {
   
   const { mutate: updateProfile } = useMutation({
     mutationFn: async (updatedData) => {
-      await axiosInstance.put("/users/profile", updatedData);
+     const response= await axiosInstance.put("/users/profile", updatedData);
+     console.log('Updating with data:', updatedData);
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["userProfile", username]);
@@ -64,7 +65,7 @@ const ProfilePage = () => {
         isOwnProfile={isOwnProfile}
         onSave={handleSave}
       />
-      <SkilldSection
+      <SkilledSection
         userData={userData}
         isOwnProfile={isOwnProfile}
         onSave={handleSave}

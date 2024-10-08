@@ -66,6 +66,19 @@ export const getprofileupdate = async (req, res) => {
       console.log("Profile picture uploaded:", result.secure_url);
       updatedData.profilepicture = result.secure_url;
     }
+    if (req.body.experience && Array.isArray(req.body.experience)) {
+      updatedData.experience = req.body.experience.map(exp => ({
+        _id: exp._id ? exp._id : undefined,  // Keep existing _id if valid, otherwise omit it
+        title: exp.title,
+        company: exp.company,
+        startDate: new Date(exp.startDate),  // Ensure date is properly formatted
+        endDate: exp.endDate ? new Date(exp.endDate) : null,
+        description: exp.description,
+      }));
+    }
+    
+    // console.log("Request Body:", req.body); // Log incoming request body
+    // console.log("Updated Data:", updatedData); 
     if (req.body.bannerImg) {
       const result = await cloudinary.uploader.upload(req.body.bannerImg);
       updatedData.bannerImg = result.secure_url;

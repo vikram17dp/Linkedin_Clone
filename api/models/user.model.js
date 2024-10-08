@@ -41,12 +41,13 @@ const userSchema = new mongoose.Schema({
     },
     skills:[String],
     experience:[
-        {
+        { _id: { type: String, required: true },
             title:String,
             company:String,
             startDate:Date,
-            endDate:Date,
-            description:String
+            endDate: { type: Date, default: null },
+            description:String,
+            
         }
     ],
     education:[
