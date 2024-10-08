@@ -37,7 +37,7 @@ const HobbiesPage = ({ userData, isOwnProfile, onSave }) => {
 
 
 	return (
-		<div className='bg-white shadow rounded-lg p-6'>
+		<div className='bg-white shadow rounded-lg p-6 mt-4'>
 			<h2 className='text-xl font-semibold mb-4'>Hobbies</h2>
 			<div className='flex flex-wrap'>
 				{hobbies.map((Hobbie, index) => (
