@@ -13,7 +13,7 @@ export default function Sidebar({ user }) {
 				/>
 				<Link to={`/profile/${user.username}`}>
 					<img
-						src={user.profilePicture || "/profile.png"}
+						src={user.profilepicture || "/profile.png"}
 						alt={user.name}
 						className='w-20 h-20 rounded-full mx-auto mt-[-40px]'
 					/>

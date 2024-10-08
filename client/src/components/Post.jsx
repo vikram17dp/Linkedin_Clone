@@ -92,7 +92,7 @@ const Post = ({ post }) => {
         user: {
             _id: authUser._id,
             name: authUser.name,
-            profilePicture: authUser.profilePicture,
+            profilepicture: authUser.profilepicture,
         },
         createdAt: new Date(),
     };
@@ -107,7 +107,7 @@ const Post = ({ post }) => {
           <div className="flex items-center">
             <Link to={`/profile/${post?.author?.username}`}>
               <img
-                src={post.author.profilePicture || "/profile.png"}
+                src={post.author.profilepicture || "/profile.png"}
                 alt={post.author.name}
                 className="size-10 rounded-full mr-3"
               />
@@ -178,7 +178,7 @@ const Post = ({ post }) => {
                 className="mb-2 bg-base-100 p-2 rounded flex items-start"
               >
                 <img
-                  src={comment.user.profilePicture || "/profile.png"}
+                  src={comment.user.profilepicture || "/profile.png"}
                   alt={comment.user.name}
                   className="w-8 h-8 rounded-full mr-2 flex-shrink-0"
                 />
