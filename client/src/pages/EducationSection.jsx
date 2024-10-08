@@ -13,6 +13,7 @@ const EducationSection = ({ userData, isOwnProfile, onSave }) => {
     fieldofstudy: "",
     startYear: "",
     endYear: "",
+    grade:""
   });
 
   useEffect(() => {
@@ -29,6 +30,7 @@ const EducationSection = ({ userData, isOwnProfile, onSave }) => {
         fieldofstudy: "",
         startYear: "",
         endYear: "",
+        grade:""
       });
     }
   };
@@ -60,9 +62,10 @@ const EducationSection = ({ userData, isOwnProfile, onSave }) => {
             <School className="mr-2 mt-1" size={20} />
             <div>
               <p className=" font-semibold">{edu.school}</p>
-              <h3 className="text-gray-600">{edu.fieldofstudy}</h3>
+              <h3 className="text-gray-600">Branch {edu.fieldofstudy}</h3>
+              <h3 className="text-gray-600">Grade {edu.grade}</h3>
               <p className="text-gray-500 text-sm">
-                {edu.startYear} - {edu.endYear || "Present"}
+                {edu.startYear} - {edu.endYear || "Present"} 
               </p>
             </div>
           </div>
@@ -101,6 +104,13 @@ const EducationSection = ({ userData, isOwnProfile, onSave }) => {
             placeholder="End Year"
             value={newEducation.endYear}
             onChange={(e) => setNewEducation({ ...newEducation, endYear: e.target.value })}
+            className="w-full p-2 border rounded mb-2"
+          />
+           <input
+            type="text"
+            placeholder="Grade or Percentage"
+            value={newEducation.grade}
+            onChange={(e) => setNewEducation({ ...newEducation, grade: e.target.value })}
             className="w-full p-2 border rounded mb-2"
           />
           <button
