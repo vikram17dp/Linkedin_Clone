@@ -7,8 +7,8 @@ import Post from "../models/post.model.js";
 export const getFeedPosts = async(req,res)=>{
     try {
         const posts = await Post.find({ author: { $in: [...req.user.connections, req.user._id] } })
-        .populate("author","name username profilePicture headline")
-        .populate("comments.user","name profilePicture")
+        .populate("author","name username profilepicture headline")
+        .populate("comments.user","name profilepicture")
         .sort({createdAt:-1})
         res.status(200).json(posts)
     } catch (error) {
@@ -76,8 +76,8 @@ export const deletePost = async(req,res)=>{
 export const getPostById = async(req,res)=>{
    try {
     const post = await Post.findById(req.params.id)
-    .populate("author","name username profilePicture headline")
-    .populate("comments.user","name profilePicture username headline")
+    .populate("author","name username profilepicture headline")
+    .populate("comments.user","name profilepicture username headline")
 
     res.status(200).json(post)
    } catch (error) {
@@ -94,7 +94,7 @@ export const CommentPost = async(req,res)=>{
         const post = await Post.findByIdAndUpdate(postId,{
             $push:{comments:{user:req.user._id,content}}
         },{new:true})
-        .populate("author","name email username headline profilePiccture")
+        .populate("author","name email username headline profilepicture")
 
        if (post.author._id.toString() !== req.user._id.toString()){
             const newNotification = new Notification({
