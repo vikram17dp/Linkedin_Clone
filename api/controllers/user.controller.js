@@ -22,7 +22,6 @@ export const getSuggestedConnections = async (req, res) => {
 export const getPublicProfile = async (req, res) => {
   try {
     const { username } = req.params;
-    // console.log("Fetching user profile for:", username);
     
     const userProfile = await User.findOne({ username });
     
@@ -31,7 +30,6 @@ export const getPublicProfile = async (req, res) => {
       return res.status(404).json({ message: "User not found" });
     }
     
-    // console.log(`User profile found:`, userProfile);
     return res.json(userProfile);
   } catch (error) {
     console.error("Error in getPublicProfile:", error);
@@ -68,17 +66,16 @@ export const getprofileupdate = async (req, res) => {
     }
     if (req.body.experience && Array.isArray(req.body.experience)) {
       updatedData.experience = req.body.experience.map(exp => ({
-        _id: exp._id ? exp._id : undefined,  // Keep existing _id if valid, otherwise omit it
+        _id: exp._id ? exp._id : undefined,  
         title: exp.title,
         company: exp.company,
-        startDate: new Date(exp.startDate),  // Ensure date is properly formatted
+        startDate: new Date(exp.startDate),  
         endDate: exp.endDate ? new Date(exp.endDate) : null,
         description: exp.description,
       }));
     }
     
-    // console.log("Request Body:", req.body); // Log incoming request body
-    // console.log("Updated Data:", updatedData); 
+
     if (req.body.bannerImg) {
       const result = await cloudinary.uploader.upload(req.body.bannerImg);
       updatedData.bannerImg = result.secure_url;

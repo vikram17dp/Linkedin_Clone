@@ -1,22 +1,21 @@
-import React, { useEffect, useState } from "react";
-import { Briefcase, X } from "lucide-react";
-import { toast } from "react-hot-toast";
 import axios from "axios";
+import { formData } from "../utils/dateUtils.js";
+import { Briefcase, X } from "lucide-react";
+import React, { useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { axiosInstance } from "../lib/axois.js";
 
-export default function ExperienceSection({ userData, isOwnProfile, onSave }) {
+const ExperienceSection = ({ userData, isOwnProfile, onSave }) => {
   const [isEditing, setIsEditing] = useState(false);
   const [experiences, setExperiences] = useState(userData.experience || []);
   const [newExperience, setNewExperience] = useState({
-    _id: "",
     title: "",
     company: "",
     startDate: "",
-    endDate: null,
+    endDate: "",
     description: "",
     currentlyWorking: false,
   });
-
   useEffect(() => {
     if (userData && userData.experience) {
       setExperiences(userData.experience);
@@ -24,18 +23,21 @@ export default function ExperienceSection({ userData, isOwnProfile, onSave }) {
   }, [userData]);
 
   const handleAddExperience = () => {
-    if (newExperience.title && newExperience.company && newExperience.startDate) {
+    if (
+      newExperience.title &&
+      newExperience.company &&
+      newExperience.startDate
+    ) {
       const experienceWithId = {
         ...newExperience,
-        _id: new Date().getTime().toString(),
+        _id: new Date().getTime().toString(), // Generate a temporary ID
       };
       setExperiences([...experiences, experienceWithId]);
       setNewExperience({
-        _id: "",
         title: "",
         company: "",
         startDate: "",
-        endDate: null,
+        endDate: "",
         description: "",
         currentlyWorking: false,
       });
@@ -49,47 +51,47 @@ export default function ExperienceSection({ userData, isOwnProfile, onSave }) {
   const handleSave = async () => {
     try {
       await axiosInstance.put("/users/profile", { experience: experiences });
-      onSave({ experience: experiences });
-      setIsEditing(false);
       toast.success("Profile updated successfully!");
     } catch (error) {
-      console.error("Error updating profile:", error);
+      console.error("Error updating profile:", error.response?.data || error.message);
       toast.error("Failed to update profile. Please try again.");
     }
   };
+  
 
   const handleCurrentlyWorkingChange = (e) => {
     setNewExperience({
       ...newExperience,
       currentlyWorking: e.target.checked,
-      endDate: e.target.checked ? null : newExperience.endDate,
+      endDate: e.target.checked ? "" : newExperience.endDate,
     });
   };
 
   return (
     <div className="bg-white shadow rounded p-6 mb-6">
       <h2 className="text-xl font-semibold mb-4">Experience</h2>
-      {experiences.map((exp) => (
-        <div className="mb-4 flex justify-between items-center" key={exp._id}>
-          <div className="flex items-start">
-            <Briefcase size={20} className="mr-2 mt-1" />
-            <div>
-              <h3 className="font-semibold">{exp.title}</h3>
-              <p className="text-gray-600">{exp.company}</p>
-              <p className="text-gray-500 text-sm">
-                {new Date(exp.startDate).toLocaleDateString()} -{" "}
-                {exp.endDate ? new Date(exp.endDate).toLocaleDateString() : "Present"}
-              </p>
-              <p className="text-gray-700">{exp.description}</p>
-            </div>
-          </div>
-          {isEditing && (
-            <button onClick={() => handleDeleteExperience(exp._id)}>
-              <X size={20} />
-            </button>
-          )}
-        </div>
-      ))}
+      {experiences.map((exp, index) => (
+  <div className="mb-4 flex justify-between items-center" key={exp._id || index}>
+    <div className="flex items-start">
+      <Briefcase size={20} className="mr-2 mt-1" />
+      <div>
+        <h3 className="font-semibold">{exp.title}</h3>
+        <p className="text-gray-600">{exp.company}</p>
+        <p className="text-gray-500 text-sm">
+          {new Date(exp.startDate).toLocaleDateString()} -{" "}
+          {exp.endDate ? new Date(exp.endDate).toLocaleDateString() : "Present"}
+        </p>
+        <p className="text-gray-700">{exp.description}</p>
+      </div>
+    </div>
+    {isEditing && (
+      <button onClick={() => handleDeleteExperience(exp._id)}>
+        <X size={20} />
+      </button>
+    )}
+  </div>
+))}
+
       {isEditing && (
         <div className="mt-4">
           <input
@@ -133,7 +135,7 @@ export default function ExperienceSection({ userData, isOwnProfile, onSave }) {
             <input
               type="date"
               placeholder="End Date"
-              value={newExperience.endDate || ""}
+              value={newExperience.endDate}
               onChange={(e) =>
                 setNewExperience({ ...newExperience, endDate: e.target.value })
               }
@@ -180,4 +182,6 @@ export default function ExperienceSection({ userData, isOwnProfile, onSave }) {
       )}
     </div>
   );
-}
+};
+
+export default ExperienceSection;
