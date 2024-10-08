@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Briefcase, X } from "lucide-react";
 import { toast } from "react-hot-toast";
 import axios from "axios";
+import { axiosInstance } from "../lib/axois.js";
 
 export default function ExperienceSection({ userData, isOwnProfile, onSave }) {
   const [isEditing, setIsEditing] = useState(false);
@@ -47,7 +48,7 @@ export default function ExperienceSection({ userData, isOwnProfile, onSave }) {
 
   const handleSave = async () => {
     try {
-      await axios.put("http://localhost:3000/api/v1/users/profile", { experience: experiences });
+      await axiosInstance.put("/users/profile", { experience: experiences });
       onSave({ experience: experiences });
       setIsEditing(false);
       toast.success("Profile updated successfully!");
