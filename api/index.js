@@ -1,5 +1,5 @@
 import express from "express";
-import dotnev from "dotenv";
+import dotenv from "dotenv";
 import mongoose from "mongoose";
 
 import authRoutes from './routes/auth.route.js'
@@ -11,7 +11,7 @@ import cors from 'cors'
 import cookieParser from "cookie-parser";
 
 
-dotnev.config();
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 5000;
