@@ -1,8 +1,8 @@
 import { Bell, Home, LogOut, User, Users } from "lucide-react";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { axiosInstance } from "../../lib/axois";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { axiosInstance } from "../../lib/axois";
 
 export default function Navbar() {
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });

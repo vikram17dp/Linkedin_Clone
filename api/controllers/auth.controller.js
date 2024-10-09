@@ -34,7 +34,7 @@ export const signup = async (req, res, next) => {
 
         res.cookie("jwt-linkdein", token, {
             httpOnly: true,
-            maxAge: 3 * 24 * 60 * 1000,
+            maxAge: 3 * 24 * 60 *60* 1000,
             sameSite: "strict",
             secure: process.env.NODE_ENV === "production"
         });
@@ -85,6 +85,10 @@ export const login = async (req, res)  => {
 
 };
 export const logout = async (req, res) => {
+    if (!req.cookies["jwt-linkdein"]) {
+        return res.status(400).json({ message: "No token found" });
+    }
+    
   res.clearCookie("jwt-linkdein");
   res.status(200).json({message:"Logged Out Successfully!"})
 };
