@@ -74,7 +74,7 @@ Welcome to the LinkedIn Clone, a full-stack platform that mimics the core functi
      ```
 ## 🔗 Links
 
-- **Live Demo:** [mern-Auth Live](https://linkedin-clone-2.onrender.com/login)
+- **Live Demo:** [Linkdin Live](https://linkedin-clone-2.onrender.com/login)
 - **GitHub Repository:** [GitHub](https://github.com/vikram17dp/Linkedin_Clone.git)
 - **LinkedIn Profile:** [Vikram D P](https://www.linkedin.com/in/vikram-d-p-20053127b/)
 
