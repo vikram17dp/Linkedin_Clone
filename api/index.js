@@ -22,7 +22,7 @@ app.use(express.json({limit:"5mb"}));
 app.use(cookieParser());
 app.use(morgan('tiny'))
 
-const allowedOrigins = ['https://linkedin-clone-2.onrender.com', 'http://localhost:5173'];
+const allowedOrigins = ['https://carrerlink.onrender.com', 'http://localhost:5173'];
 
 app.use(cors({
   origin: function (origin, callback) {
