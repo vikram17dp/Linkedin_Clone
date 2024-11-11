@@ -3,7 +3,7 @@ import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { axiosInstance } from "../../lib/axois";
-
+import img from "../../../dist/small-logo.png"
 export default function Navbar() {
   const { data: authUser } = useQuery({ queryKey: ["authUser"] });
   const queryClient = useQueryClient();
@@ -45,9 +45,9 @@ export default function Navbar() {
           <div className="flex items-center space-x-4">
             <Link to={"/"}>
               <img
-                src="/small-logo.png"
-                alt="Linkdein"
-                className="h-8 rounded"
+                src={img}
+                alt="CarrerLink"
+                className="h-16 rounded"
               />
             </Link>
           </div>

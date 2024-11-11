@@ -10,6 +10,7 @@ import cors from 'cors'
 import cookieParser from "cookie-parser";
 import path from 'path';
 import { fileURLToPath } from 'url';
+import morgan from "morgan";
 
 dotenv.config();
 const app = express();
@@ -19,6 +20,7 @@ const __dirname = path.dirname(__filename);
 
 app.use(express.json({limit:"5mb"}));
 app.use(cookieParser());
+app.use(morgan('tiny'))
 
 const allowedOrigins = ['https://linkedin-clone-2.onrender.com', 'http://localhost:5173'];
 

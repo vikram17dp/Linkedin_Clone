@@ -29,7 +29,7 @@ const userSchema = new mongoose.Schema({
     },
     headline:{
         type:String,
-        default:"Linkdein User"
+        default:"CarrerLink User"
     },
     location:{
         type:String,

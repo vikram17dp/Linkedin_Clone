@@ -1,13 +1,13 @@
 import React from "react";
 import SignupForm from "../../components/auth/SignupForm";
 import { Link } from "react-router-dom";
-
+import img from '../../../dist/small-logo.png'
 export default function SignupPage() {
   return (
     <div className="min-h-screen justify-centre flex flex-col py-12 sm:px-6 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-md">
         <img
-          src="/logo.svg"
+          src={img}
           alt="LinkedIn"
           className="mx-auto h-36 w-auto cursor-pointer"
         />
@@ -25,7 +25,7 @@ export default function SignupPage() {
               </div>
               <div className="relative flex justify-center text-sm">
                 <span className="px-2 bg-white text-gray-500">
-                  Already on LinkedIn?
+                  Already on CarrerLink?
                 </span>
               </div>
             </div>
