@@ -30,60 +30,54 @@ export const sendConnectionRequest = async (req, res) => {
 
 
 export const acceptConnectionRequest = async (req, res) => {
-  // console.log("Request User ID:", req.user._id); // Log user ID
-  // console.log("Request ID:", req.params.requestId); // Log request ID
   try {
     const { requestId } = req.params;
     const userId = req.user._id;
-    const request = await Connection
-      .findById(requestId)
-      .populate("sender", "name email username")
-      .populate("recipient", "name username");
+
+    // Use findOneAndUpdate to atomically update the request status
+    const request = await Connection.findOneAndUpdate(
+      { 
+        _id: requestId, 
+        recipient: userId, 
+        status: 'pending' 
+      },
+      { status: 'accepted' },
+      { new: true, runValidators: true }
+    ).populate("sender", "name email username")
+     .populate("recipient", "name username");
+
     if (!request) {
-      return res.status(404).json({ message: "Connection request not found" });
+      return res.status(404).json({ message: "Connection request not found or already processed" });
     }
-    if (request.recipient._id.toString() !== userId.toString()) {
-      return res
-        .status(403)
-        .json({ message: "Not authorized to accept this request" });
-    }
-    if (request.status !== "pending") {
-      return res
-        .status(400)
-        .json({ message: "This request has already been processed" });
-    }
-    request.status = "accepted";
-    await request.save();
-    await User.findByIdAndUpdate(request.sender._id, {
-      $addToSet: { connections: userId },
-    });
-    await User.findByIdAndUpdate(userId, {
-      $addToSet: { connections: request.sender._id },
-    });
-    const notification = new Notification({
-      recipient: request.sender._id,
-      type: "connectionAccepted",
-      relatedUser: userId,
-    });
-    await notification.save();
+
+    // Use Promise.all to perform multiple operations concurrently
+    await Promise.all([
+      User.findByIdAndUpdate(request.sender._id, {
+        $addToSet: { connections: userId },
+      }),
+      User.findByIdAndUpdate(userId, {
+        $addToSet: { connections: request.sender._id },
+      }),
+      new Notification({
+        recipient: request.sender._id,
+        type: "connectionAccepted",
+        relatedUser: userId,
+      }).save()
+    ]);
+
     const senderEmail = request.sender.email;
     const senderName = request.sender.name;
     const recipientName = request.recipient.name;
-    const profileUrl =
-      process.env.CLIENT_URL + "/profile/" + request.recipient.username;
-    try {
-      await sendConnectionAcceptedEmail(
-        senderEmail,
-        senderName,
-        recipientName,
-        profileUrl
-      );
-    } catch (error) {
-      console.error(error);
-    }
+    const profileUrl = `${process.env.CLIENT_URL}/profile/${request.recipient.username}`;
+
+    // Send email asynchronously without awaiting
+    sendConnectionAcceptedEmail(senderEmail, senderName, recipientName, profileUrl)
+      .catch(error => console.error('Error sending email:', error));
+
+    res.status(200).json({ message: "Connection request accepted successfully" });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ message: "Server Error" });
+    console.error('Error in acceptConnectionRequest:', error);
+    res.status(500).json({ message: "Server Error", error: error.message });
   }
 };
 export const rejectConnectionRequest = async (req, res) => {

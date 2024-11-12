@@ -20,13 +20,15 @@ const ProfileHeader = ({ userData, onSave, isOwnProfile }) => {
 
 	
     const { mutate: sendConnectionRequest } = useMutation({
-		mutationFn: (userId) => axiosInstance.post(`/connection/requests/${userId}`),
+		mutationFn: (userId) => axiosInstance.post(`/connection/request/${userId}`),
 		onSuccess: () => {
 			toast.success("Connection request sent");
 			refetchConnectionStatus();
 			queryClient.invalidateQueries(["connectionRequests"]);
+			setIsEditing(false)
 		},
 		onError: (error) => {
+			console.log("Error:", error);
 			toast.error(error.response?.data?.message || "An error occurred");
 		},
 	})
@@ -71,7 +73,7 @@ const ProfileHeader = ({ userData, onSave, isOwnProfile }) => {
 	
     const renderConnectionButton = () => {
 		const baseClass = "text-white py-2 px-4 rounded-full transition duration-300 flex items-center justify-center";
-		switch (getConnectionStatus) {
+		switch (getConnectionStatus?.status) {
 			case "connected":
 				return (
 					<div className='flex gap-2 justify-center'>

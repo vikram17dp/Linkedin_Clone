@@ -20,6 +20,9 @@ const FriendRequest = ({ request }) => {
       toast.error(error.response.data.error);
     },
   });
+
+  
+  
   const { mutate: rejectConnectionRequest } = useMutation({
     mutationFn: (requestId) =>
       axiosInstance.put(`/connection/reject/${requestId}`),
@@ -31,8 +34,7 @@ const FriendRequest = ({ request }) => {
       toast.error(error.response.data.error);
     },
   });
-//   console.log("Friend Request Data:", request._id);
-//   console.log("requestsender",request.sender);
+
 
   return (
     <div className="bg-white rounded-lg shadow p-4 flex items-center justify-between transition-all hover:shadow-md">

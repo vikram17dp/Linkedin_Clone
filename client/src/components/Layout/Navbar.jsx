@@ -99,10 +99,10 @@ export default function Navbar() {
               </>
             ) : (
               <>
-                <Link to={"/login"} className="btn btn-ghost">
+                <Link to={"/login"} className="btn btn-ghost mb-6">
                   Sign In
                 </Link>
-                <Link to="/signup" className="btn btn-primary">
+                <Link to="/signup" className="btn btn-primary mb-6 ">
                   Join now
                 </Link>
               </>
