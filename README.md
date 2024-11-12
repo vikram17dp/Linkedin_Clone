@@ -1,7 +1,7 @@
-# LinkedIn Clone Project 🚀
+# CarrerLink Project 🚀
 
 ## Overview
-Welcome to the LinkedIn Clone, a full-stack platform that mimics the core functionalities of LinkedIn. This project is built using the MERN stack and integrates Mailtrap for secure email notifications, providing a smooth and responsive user experience on the frontend, coupled with a robust and scalable backend.
+Welcome to the CarrerLink website, a full-stack platform that mimics the core functionalities of LinkedIn. This project is built using the MERN stack and integrates Mailtrap for secure email notifications, providing a smooth and responsive user experience on the frontend, coupled with a robust and scalable backend.
 
 ## Key Features 🔑
 
@@ -74,8 +74,8 @@ Welcome to the LinkedIn Clone, a full-stack platform that mimics the core functi
      ```
 ## 🔗 Links
 
-- **Live Demo:** [Linkdin Live](https://linkedin-clone-2.onrender.com/login)
-- **GitHub Repository:** [GitHub](https://github.com/vikram17dp/Linkedin_Clone.git)
+- **Live Demo:** [CarrerLink Live](https://carrerlink.onrender.com/login)
+- **GitHub Repository:** [GitHub](https://github.com/vikram17dp/CarrerLink.git)
 - **LinkedIn Profile:** [Vikram D P](https://www.linkedin.com/in/vikram-d-p-20053127b/)
 
 💡 About the Project
