@@ -84,14 +84,30 @@ export const login = async (req, res)  => {
 
 
 };
+
+
+
+
 export const logout = async (req, res) => {
-    if (!req.cookies["jwt-linkdein"]) {
-        return res.status(400).json({ message: "No token found" });
+  try {
+    const token = req.cookies["jwt-linkdein"];
+    if (!token) {
+      return res.status(400).json({ message: "No token found" });
     }
     
-  res.clearCookie("jwt-linkdein");
-  res.status(200).json({message:"Logged Out Successfully!"})
+    res.clearCookie("jwt-linkdein", {
+      httpOnly: true,
+      sameSite: "strict",
+      secure: process.env.NODE_ENV === "production",
+    });
+
+    return res.status(200).json({ message: "Logged Out Successfully!" });
+  } catch (error) {
+    console.error("Logout Error:", error);
+    res.status(500).json({ message: "Server error!" });
+  }
 };
+
 
 
 export const getCurrentuser = async (req,res)=>{

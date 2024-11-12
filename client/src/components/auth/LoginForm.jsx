@@ -4,6 +4,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import toast from "react-hot-toast";
 import { Loader } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+
 export default function LoginForm() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
@@ -18,9 +19,10 @@ export default function LoginForm() {
       navigate("/");
     },
     onError: (err) => {
-      toast.error(err.response.data.message || "Something went wrong");
+      toast.error(err.response?.data?.message || "Something went wrong");
     },
   });
+
   const handleSubmit = (e) => {
     e.preventDefault();
     loginMutation({ username, password });
@@ -44,10 +46,10 @@ export default function LoginForm() {
         className="input input-bordered w-full"
         required
       />
-
       <button type="submit" className="btn btn-primary w-full">
         {isLoading ? <Loader className="size-5 animate-spin" /> : "Login"}
       </button>
+     
     </form>
   );
 }

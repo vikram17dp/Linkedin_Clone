@@ -18,7 +18,8 @@ const ProfilePage = () => {
 
   const { data: userProfile, isLoading: isUserProfileLoading } = useQuery({
     queryKey: ["userProfile", username],
-    queryFn: () => axiosInstance.get(`/users/${username}`).then(res => res.data),
+    queryFn: () => axiosInstance.get(`/users/${username}`).then(res =>
+       res.data),
     enabled: !!username,
   });
   
@@ -40,6 +41,8 @@ const ProfilePage = () => {
   const isOwnProfile = authUser?.username === userProfile?.username;
   const userData = isOwnProfile ? authUser : userProfile;
 
+  
+  
   const handleSave = (updatedData) => {
     updateProfile(updatedData);
   };
