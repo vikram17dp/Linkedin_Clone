@@ -39,15 +39,15 @@ export default function Navbar() {
     : 0;
 
   return (
-    <nav className="bg-secondary shadow-md sticky top-0 z-10">
+    <nav className="bg-secondary shadow-md sticky top-0  z-10 h-16 items-center justify-center ">
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex justify-between items-center py-3">
-          <div className="flex items-center space-x-4">
+          <div className="flex items-center space-x-4 ">
             <Link to={"/"}>
               <img
                 src={img}
                 alt="CarrerLink"
-                className="h-16 rounded"
+                className="h-16 rounded justify-start items-start pr-18 "
               />
             </Link>
           </div>
